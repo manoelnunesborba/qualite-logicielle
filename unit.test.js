@@ -97,7 +97,23 @@ describe("Test afficherTableauListeVoitures", () => {
     }, 1000);
   });
 });
-
+describe("afficherSnackbar", () => {
+  test('afficherSnackbar affiche le message Snackbar', async () => {
+    jest.useFakeTimers();
+    document.body.innerHTML = '<div id="test-snackbar" class="snackbar"></div>';
+  
+    // Appeler la méthode afficherSnackbar avec l'id de l'élément
+    afficherSnackbar('test-snackbar');
+  
+    // Vérifier que la classe "show" a été ajoutée à l'élément
+    const snackbar = document.getElementById('test-snackbar');
+    expect(snackbar.classList.contains('show')).toBe(true);
+    console.log(document.body.innerHTML )
+    // Utiliser jest.runAllTimers pour avancer le temps et vérifier que la classe "show" est retirée après 3 secondes
+    await jest.runAllTimers();
+    console.log(document.body.innerHTML )
+    expect(snackbar.classList.contains('show')).toBe(false);
+  });})
 describe("supprimerVoiture", () => {
   // let fetchMock;
   // let contenuVoiture, divSupprimer;
@@ -380,25 +396,6 @@ describe("Test ajouterContenuListeVoitures", () => {
   });
 });
 
-describe("Test afficherSnackbar", () => {
-  test('should add and remove the "show" class correctly', () => {
-    document.body.innerHTML = '<div id="snackbar"></div>';
-    const snackbar = document.getElementById("snackbar");
-
-    // Mock du tempss
-    jest.useFakeTimers();
-
-    afficherSnackbar("snackbar");
-
-    expect(snackbar.classList.contains("show")).toBe(true);
-
-    jest.advanceTimersByTime(3000);
-
-    jest.runAllTimers();
-
-    expect(snackbar.classList.contains("show")).toBe(false);
-  });
-});
 
 describe("Test calculerNbPages", () => {
   beforeAll(() => {
@@ -693,4 +690,4 @@ describe("afficherFormulaireCreation", () => {
     expect(recherche.style.display).toBe("none");
     expect(pagination.style.display).toBe("none");
   });
-});
+})
