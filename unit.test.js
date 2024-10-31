@@ -32,8 +32,9 @@ global.fetch = jest.fn((url) => {
 document.body.innerHTML = '<div id="root"></div>';
 global.root = document.getElementById("root");
 
-/// MARK: import
-
+function attendre(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 const {
   afficherTableauListeVoitures,
   effacerFormulaire,
@@ -84,26 +85,26 @@ describe("Testes unitaires", () => {
     let nouvelle, fiche, recherche, pagination;
   
     beforeEach(() => {
-      // Set up the necessary DOM elements
+      // Configurer les éléments DOM nécessaires
       nouvelle = document.createElement("div");
-      nouvelle.setAttribute("id", "nouvelle");
+      nouvelle.id = "nouvelle";
       document.body.appendChild(nouvelle);
   
       fiche = document.createElement("div");
-      fiche.setAttribute("id", "fiche");
+      fiche.id = "fiche";
       document.body.appendChild(fiche);
   
       recherche = document.createElement("div");
-      recherche.setAttribute("id", "recherche");
+      recherche.id = "recherche";
       document.body.appendChild(recherche);
   
       pagination = document.createElement("div");
-      pagination.classList.add("pagination");
+      pagination.className = "pagination";
       document.body.appendChild(pagination);
     });
   
     afterEach(() => {
-      // Clean up the DOM elements
+      // Nettoyer les éléments DOM
       document.body.removeChild(nouvelle);
       document.body.removeChild(fiche);
       document.body.removeChild(recherche);
@@ -118,7 +119,7 @@ describe("Testes unitaires", () => {
       expect(recherche.style.display).toBe("none");
       expect(pagination.style.display).toBe("none");
     });
-  })
+  });
   describe("Test afficherSnackbar", () => {
     test('afficherSnackbar affiche le message Snackbar', async () => {
       jest.useFakeTimers();
@@ -130,10 +131,8 @@ describe("Testes unitaires", () => {
       // Vérifier que la classe "show" a été ajoutée à l'élément
       const snackbar = document.getElementById('test-snackbar');
       expect(snackbar.classList.contains('show')).toBe(true);
-      console.log(document.body.innerHTML )
       // Utiliser jest.runAllTimers pour avancer le temps et vérifier que la classe "show" est retirée après 3 secondes
       await jest.runAllTimers();
-      console.log(document.body.innerHTML )
       expect(snackbar.classList.contains('show')).toBe(false);
     });
   })
@@ -309,46 +308,7 @@ describe("Testes unitaires", () => {
   });
 })
 describe("Tests d'intégration", () => {
-  describe("Test afficherTableauListeVoitures", () => {
-    test("fetches voiture data from the API", async () => {
-      document.body.innerHTML = `
-      <input id="marque" type="text" value="some value">
-        <input id="modele" value="some value">
-        <input id="finition" value="some value">
-        <input id="carburant" value="some value">
-        <input id="km" value="some value">
-        <input id="annee" value="some value">
-        <input id="prix" value="some value">
-        <div id="saisieRecherche"></div>
-        <div id="pages"><a class="active">1</a></div>
-        <div id="listeVoiture"></div>
-        <div class="pagination">
-          <a class="previous"></a>
-          <a class="next disabled"></a>
-        </div>
-        
-        <div id="nouvelle" style="display: block;"></div>
-        <div id="fiche" style="display: none;"></div>
-        <div id="recherche" style="display: none;"></div>
-        <div class="pagination" style="display: none;"></div>
-  
-      `;
-      // Call the function and wait for it to finish
-      afficherTableauListeVoitures(1);
-      expect(fetch).toHaveBeenCalledWith(
-        "http://example.com/api/voiture/get/all/0/5"
-      );
-      await setTimeout(() => {
-        expect(document.getElementById("marque").value).toBe("");
-        expect(document.getElementById("modele").value).toBe("");
-        expect(document.getElementById("finition").value).toBe("");
-        expect(document.getElementById("carburant").value).toBe("");
-        expect(document.getElementById("km").value).toBe("");
-        expect(document.getElementById("annee").value).toBe("");
-        expect(document.getElementById("prix").value).toBe("");
-      }, 1000);
-    });
-  });
+
   
   describe("supprimerVoiture", () => {
     // let fetchMock;
@@ -687,6 +647,46 @@ describe("Tests d'intégration", () => {
       expect(bouton).not.toBeNull();
       expect(bouton.textContent).toBe("Supprimer");
       expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(2)");
+    });
+  });
+    describe("Test afficherTableauListeVoitures", () => {
+    test("fetches voiture data from the API", async () => {
+      document.body.innerHTML = `
+      <input id="marque" type="text" value="some value">
+        <input id="modele" value="some value">
+        <input id="finition" value="some value">
+        <input id="carburant" value="some value">
+        <input id="km" value="some value">
+        <input id="annee" value="some value">
+        <input id="prix" value="some value">
+        <div id="saisieRecherche"></div>
+        <div id="pages"><a class="active">1</a></div>
+        <div id="listeVoiture"></div>
+        <div class="pagination">
+          <a class="previous"></a>
+          <a class="next disabled"></a>
+        </div>
+        
+        <div id="nouvelle" style="display: block;"></div>
+        <div id="fiche" style="display: none;"></div>
+        <div id="recherche" style="display: none;"></div>
+        <div class="pagination" style="display: none;"></div>
+  
+      `;
+      // Call the function and wait for it to finish
+      afficherTableauListeVoitures(1);
+      expect(fetch).toHaveBeenCalledWith(
+        "http://example.com/api/voiture/get/all/0/5"
+      );
+      await setTimeout(() => {
+        expect(document.getElementById("marque").value).toBe("");
+        expect(document.getElementById("modele").value).toBe("");
+        expect(document.getElementById("finition").value).toBe("");
+        expect(document.getElementById("carburant").value).toBe("");
+        expect(document.getElementById("km").value).toBe("");
+        expect(document.getElementById("annee").value).toBe("");
+        expect(document.getElementById("prix").value).toBe("");
+      }, 1000);
     });
   });
 })

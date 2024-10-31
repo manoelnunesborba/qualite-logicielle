@@ -352,7 +352,6 @@ function afficherBlocVoiture(voiture) {
 
 function afficherFormulaireCreation() {
   document.getElementById("nouvelle").style.display = "block";
-
   document.getElementById("fiche").style.display = "none";
   document.getElementById("recherche").style.display = "none";
   document.querySelector("div.pagination").style.display = "none";
