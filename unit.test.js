@@ -81,45 +81,7 @@ describe("Testes unitaires", () => {
       );
     });
   });
-  describe("Test afficherFormulaireCreation", () => {
-    let nouvelle, fiche, recherche, pagination;
-  
-    beforeEach(() => {
-      // Configurer les éléments DOM nécessaires
-      nouvelle = document.createElement("div");
-      nouvelle.id = "nouvelle";
-      document.body.appendChild(nouvelle);
-  
-      fiche = document.createElement("div");
-      fiche.id = "fiche";
-      document.body.appendChild(fiche);
-  
-      recherche = document.createElement("div");
-      recherche.id = "recherche";
-      document.body.appendChild(recherche);
-  
-      pagination = document.createElement("div");
-      pagination.className = "pagination";
-      document.body.appendChild(pagination);
-    });
-  
-    afterEach(() => {
-      // Nettoyer les éléments DOM
-      document.body.removeChild(nouvelle);
-      document.body.removeChild(fiche);
-      document.body.removeChild(recherche);
-      document.body.removeChild(pagination);
-    });
-  
-    test("should display the creation form and hide other sections", () => {
-      afficherFormulaireCreation();
-  
-      expect(nouvelle.style.display).toBe("block");
-      expect(fiche.style.display).toBe("none");
-      expect(recherche.style.display).toBe("none");
-      expect(pagination.style.display).toBe("none");
-    });
-  });
+
   describe("Test afficherSnackbar", () => {
     test('afficherSnackbar affiche le message Snackbar', async () => {
       jest.useFakeTimers();
@@ -304,6 +266,45 @@ describe("Testes unitaires", () => {
       expect(
         document.querySelector("div.pagination a.next").hasAttribute("href")
       ).toBe(false);
+    });
+  });
+  describe("Test afficherFormulaireCreation", () => {
+    let nouvelle, fiche, recherche, pagination;
+  
+    beforeEach(() => {
+      // Configurer les éléments DOM nécessaires
+      nouvelle = document.createElement("div");
+      nouvelle.id = "nouvelle";
+      document.body.appendChild(nouvelle);
+  
+      fiche = document.createElement("div");
+      fiche.id = "fiche";
+      document.body.appendChild(fiche);
+  
+      recherche = document.createElement("div");
+      recherche.id = "recherche";
+      document.body.appendChild(recherche);
+  
+      pagination = document.createElement("div");
+      pagination.className = "pagination";
+      document.body.appendChild(pagination);
+    });
+  
+    afterEach(() => {
+      // Nettoyer les éléments DOM
+      document.body.removeChild(nouvelle);
+      document.body.removeChild(fiche);
+      document.body.removeChild(recherche);
+      document.body.removeChild(pagination);
+    });
+  
+    test("should display the creation form and hide other sections", () => {
+      afficherFormulaireCreation();
+  
+      expect(nouvelle.style.display).toBe("block");
+      expect(fiche.style.display).toBe("none");
+      expect(recherche.style.display).toBe("none");
+      expect(pagination.style.display).toBe("none");
     });
   });
 })
