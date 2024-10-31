@@ -32,9 +32,6 @@ global.fetch = jest.fn((url) => {
 document.body.innerHTML = '<div id="root"></div>';
 global.root = document.getElementById("root");
 
-function attendre(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 const {
   afficherTableauListeVoitures,
   effacerFormulaire,
@@ -405,7 +402,7 @@ describe("Tests d'intégration", () => {
   describe("Test afficherVoiture", () => {
     beforeAll(() => {
       // Set up the necessary configuration object
-      global.config = { urlBack: "http://example.com/api" };
+      global.config = { urlBack: "http://example.com/api", ligneParPage: 5, };
     });
   
     beforeEach(() => {
@@ -650,7 +647,7 @@ describe("Tests d'intégration", () => {
       expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(2)");
     });
   });
-    describe("Test afficherTableauListeVoitures", () => {
+  describe("Test afficherTableauListeVoitures", () => {
     test("fetches voiture data from the API", async () => {
       document.body.innerHTML = `
       <input id="marque" type="text" value="some value">
