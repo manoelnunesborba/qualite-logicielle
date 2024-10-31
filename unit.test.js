@@ -304,9 +304,141 @@ describe("Testes unitaires", () => {
       expect(pagination.style.display).toBe("none");
     });
   });
+  describe("Test afficherBlocVoiture", () => {
+    let root;
+  
+    beforeEach(() => {
+      // Mock the DOM elements
+      root = document.createElement("div");
+      root.setAttribute("id", "infos");
+      document.body.appendChild(root);
+    });
+  
+    afterEach(() => {
+      // Clean up the DOM elements
+      document.body.removeChild(root);
+    });
+  
+    test("should display car information correctly", () => {
+      const voiture = JSON.stringify({
+        id: 1,
+        marque: "Citroen",
+        modele: "C3",
+        finition: "Shine",
+        carburant: { char: "E" },
+        km: 50000,
+        annee: 2018,
+        prix: 15000,
+      });
+  
+      afficherBlocVoiture(voiture);
+  
+      const contenuVoiture = document.getElementById("contenuVoiture");
+      expect(contenuVoiture).not.toBeNull();
+  
+      const labels = contenuVoiture.querySelectorAll("label");
+      const spans = contenuVoiture.querySelectorAll("span.infoVoiture");
+  
+      expect(labels.length).toBe(7);
+      expect(spans.length).toBe(7);
+  
+      expect(labels[0].textContent).toBe("Marque : ");
+      expect(spans[0].textContent).toBe("Citroen");
+  
+      expect(labels[1].textContent).toBe("Modèle : ");
+      expect(spans[1].textContent).toBe("C3");
+  
+      expect(labels[2].textContent).toBe("Finition : ");
+      expect(spans[2].textContent).toBe("Shine");
+  
+      expect(labels[3].textContent).toBe("Carburant : ");
+      expect(spans[3].textContent).toBe("Essence");
+  
+      expect(labels[4].textContent).toBe("Kilométrage : ");
+      expect(spans[4].textContent).toBe("50000");
+  
+      expect(labels[5].textContent).toBe("Année : ");
+      expect(spans[5].textContent).toBe("2018");
+  
+      expect(labels[6].textContent).toBe("Prix : ");
+      expect(spans[6].textContent).toBe("15000");
+  
+      const divSupprimer = document.getElementById("divSupprimer");
+      expect(divSupprimer).not.toBeNull();
+  
+      const bouton = divSupprimer.querySelector("button");
+      expect(bouton).not.toBeNull();
+      expect(bouton.textContent).toBe("Supprimer");
+      expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(1)");
+    });
+  
+    test("should remove existing car information before displaying new one", () => {
+      const voiture1 = JSON.stringify({
+        id: 1,
+        marque: "Citroen",
+        modele: "C3",
+        finition: "Shine",
+        carburant: { char: "E" },
+        km: 50000,
+        annee: 2018,
+        prix: 15000,
+      });
+  
+      const voiture2 = JSON.stringify({
+        id: 2,
+        marque: "Peugeot",
+        modele: "208",
+        finition: "Allure",
+        carburant: { char: "D" },
+        km: 30000,
+        annee: 2019,
+        prix: 18000,
+      });
+  
+      afficherBlocVoiture(voiture1);
+      afficherBlocVoiture(voiture2);
+  
+      const contenuVoiture = document.getElementById("contenuVoiture");
+      expect(contenuVoiture).not.toBeNull();
+  
+      const labels = contenuVoiture.querySelectorAll("label");
+      const spans = contenuVoiture.querySelectorAll("span.infoVoiture");
+  
+      expect(labels.length).toBe(7);
+      expect(spans.length).toBe(7);
+  
+      expect(labels[0].textContent).toBe("Marque : ");
+      expect(spans[0].textContent).toBe("Peugeot");
+  
+      expect(labels[1].textContent).toBe("Modèle : ");
+      expect(spans[1].textContent).toBe("208");
+  
+      expect(labels[2].textContent).toBe("Finition : ");
+      expect(spans[2].textContent).toBe("Allure");
+  
+      expect(labels[3].textContent).toBe("Carburant : ");
+      expect(spans[3].textContent).toBe("Diesel");
+  
+      expect(labels[4].textContent).toBe("Kilométrage : ");
+      expect(spans[4].textContent).toBe("30000");
+  
+      expect(labels[5].textContent).toBe("Année : ");
+      expect(spans[5].textContent).toBe("2019");
+  
+      expect(labels[6].textContent).toBe("Prix : ");
+      expect(spans[6].textContent).toBe("18000");
+  
+      const divSupprimer = document.getElementById("divSupprimer");
+      expect(divSupprimer).not.toBeNull();
+  
+      const bouton = divSupprimer.querySelector("button");
+      expect(bouton).not.toBeNull();
+      expect(bouton.textContent).toBe("Supprimer");
+      expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(2)");
+    });
+  });
 })
 describe("Tests d'intégration", () => {
-
   
   describe("supprimerVoiture", () => {
     // let fetchMock;
@@ -514,139 +646,7 @@ describe("Tests d'intégration", () => {
     });
   });
   
-  describe("afficherBlocVoiture", () => {
-    let root;
-  
-    beforeEach(() => {
-      // Mock the DOM elements
-      root = document.createElement("div");
-      root.setAttribute("id", "infos");
-      document.body.appendChild(root);
-    });
-  
-    afterEach(() => {
-      // Clean up the DOM elements
-      document.body.removeChild(root);
-    });
-  
-    test("should display car information correctly", () => {
-      const voiture = JSON.stringify({
-        id: 1,
-        marque: "Citroen",
-        modele: "C3",
-        finition: "Shine",
-        carburant: { char: "E" },
-        km: 50000,
-        annee: 2018,
-        prix: 15000,
-      });
-  
-      afficherBlocVoiture(voiture);
-  
-      const contenuVoiture = document.getElementById("contenuVoiture");
-      expect(contenuVoiture).not.toBeNull();
-  
-      const labels = contenuVoiture.querySelectorAll("label");
-      const spans = contenuVoiture.querySelectorAll("span.infoVoiture");
-  
-      expect(labels.length).toBe(7);
-      expect(spans.length).toBe(7);
-  
-      expect(labels[0].textContent).toBe("Marque : ");
-      expect(spans[0].textContent).toBe("Citroen");
-  
-      expect(labels[1].textContent).toBe("Modèle : ");
-      expect(spans[1].textContent).toBe("C3");
-  
-      expect(labels[2].textContent).toBe("Finition : ");
-      expect(spans[2].textContent).toBe("Shine");
-  
-      expect(labels[3].textContent).toBe("Carburant : ");
-      expect(spans[3].textContent).toBe("Essence");
-  
-      expect(labels[4].textContent).toBe("Kilométrage : ");
-      expect(spans[4].textContent).toBe("50000");
-  
-      expect(labels[5].textContent).toBe("Année : ");
-      expect(spans[5].textContent).toBe("2018");
-  
-      expect(labels[6].textContent).toBe("Prix : ");
-      expect(spans[6].textContent).toBe("15000");
-  
-      const divSupprimer = document.getElementById("divSupprimer");
-      expect(divSupprimer).not.toBeNull();
-  
-      const bouton = divSupprimer.querySelector("button");
-      expect(bouton).not.toBeNull();
-      expect(bouton.textContent).toBe("Supprimer");
-      expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(1)");
-    });
-  
-    test("should remove existing car information before displaying new one", () => {
-      const voiture1 = JSON.stringify({
-        id: 1,
-        marque: "Citroen",
-        modele: "C3",
-        finition: "Shine",
-        carburant: { char: "E" },
-        km: 50000,
-        annee: 2018,
-        prix: 15000,
-      });
-  
-      const voiture2 = JSON.stringify({
-        id: 2,
-        marque: "Peugeot",
-        modele: "208",
-        finition: "Allure",
-        carburant: { char: "D" },
-        km: 30000,
-        annee: 2019,
-        prix: 18000,
-      });
-  
-      afficherBlocVoiture(voiture1);
-      afficherBlocVoiture(voiture2);
-  
-      const contenuVoiture = document.getElementById("contenuVoiture");
-      expect(contenuVoiture).not.toBeNull();
-  
-      const labels = contenuVoiture.querySelectorAll("label");
-      const spans = contenuVoiture.querySelectorAll("span.infoVoiture");
-  
-      expect(labels.length).toBe(7);
-      expect(spans.length).toBe(7);
-  
-      expect(labels[0].textContent).toBe("Marque : ");
-      expect(spans[0].textContent).toBe("Peugeot");
-  
-      expect(labels[1].textContent).toBe("Modèle : ");
-      expect(spans[1].textContent).toBe("208");
-  
-      expect(labels[2].textContent).toBe("Finition : ");
-      expect(spans[2].textContent).toBe("Allure");
-  
-      expect(labels[3].textContent).toBe("Carburant : ");
-      expect(spans[3].textContent).toBe("Diesel");
-  
-      expect(labels[4].textContent).toBe("Kilométrage : ");
-      expect(spans[4].textContent).toBe("30000");
-  
-      expect(labels[5].textContent).toBe("Année : ");
-      expect(spans[5].textContent).toBe("2019");
-  
-      expect(labels[6].textContent).toBe("Prix : ");
-      expect(spans[6].textContent).toBe("18000");
-  
-      const divSupprimer = document.getElementById("divSupprimer");
-      expect(divSupprimer).not.toBeNull();
-  
-      const bouton = divSupprimer.querySelector("button");
-      expect(bouton).not.toBeNull();
-      expect(bouton.textContent).toBe("Supprimer");
-      expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(2)");
-    });
-  });
+
   describe("Test afficherTableauListeVoitures", () => {
     test("fetches voiture data from the API", async () => {
       document.body.innerHTML = `
