@@ -1,8 +1,10 @@
+//MARK: mock
 global.config = {
   urlBack: "http://example.com/api",
   ligneParPage: 5,
 };
-// Mock the fetch API globally
+// import * as stockcarModule from "./esieaFront/src/main/webapp/stockcar.js";
+
 global.fetch = jest.fn((url) => {
   if (
     url ===
@@ -31,7 +33,7 @@ global.fetch = jest.fn((url) => {
 
 document.body.innerHTML = '<div id="root"></div>';
 global.root = document.getElementById("root");
-
+///MARK: imports
 const {
   afficherTableauListeVoitures,
   effacerFormulaire,
@@ -54,8 +56,8 @@ const {
   accueil,
 } = require("./esieaFront/src/main/webapp/stockcar.js");
 
-
 describe("Testes unitaires", () => {
+  ///MARK: Unit tests
   describe("Test cacherFormulaireCreation", () => {
     test("should display and hide the correct elements", () => {
       // Set up the necessary DOM elements
@@ -65,10 +67,10 @@ describe("Testes unitaires", () => {
         <div id="recherche" style="display: none;"></div>
         <div class="pagination" style="display: none;"></div>
       `;
-  
+
       // Run the code snippet
       cacherFormulaireCreation();
-  
+
       // Verify that the elements have the correct display styles
       expect(document.getElementById("nouvelle").style.display).toBe("none");
       expect(document.getElementById("fiche").style.display).toBe("block");
@@ -80,26 +82,27 @@ describe("Testes unitaires", () => {
   });
 
   describe("Test afficherSnackbar", () => {
-    test('afficherSnackbar affiche le message Snackbar', async () => {
+    test("afficherSnackbar affiche le message Snackbar", async () => {
       jest.useFakeTimers();
-      document.body.innerHTML = '<div id="test-snackbar" class="snackbar"></div>';
-    
+      document.body.innerHTML =
+        '<div id="test-snackbar" class="snackbar"></div>';
+
       // Appeler la méthode afficherSnackbar avec l'id de l'élément
-      afficherSnackbar('test-snackbar');
-    
+      afficherSnackbar("test-snackbar");
+
       // Vérifier que la classe "show" a été ajoutée à l'élément
-      const snackbar = document.getElementById('test-snackbar');
-      expect(snackbar.classList.contains('show')).toBe(true);
+      const snackbar = document.getElementById("test-snackbar");
+      expect(snackbar.classList.contains("show")).toBe(true);
       // Utiliser jest.runAllTimers pour avancer le temps et vérifier que la classe "show" est retirée après 3 secondes
       await jest.runAllTimers();
-      expect(snackbar.classList.contains('show')).toBe(false);
+      expect(snackbar.classList.contains("show")).toBe(false);
     });
-  })
+  });
   describe("Test calculerNbPages", () => {
     beforeAll(() => {
       global.config = { ligneParPage: 10 };
     });
-  
+
     test("should calculate the correct number of pages", () => {
       // Test cases
       const testCases = [
@@ -110,7 +113,7 @@ describe("Testes unitaires", () => {
         { nbLignes: 20, expected: 2 },
         { nbLignes: 25, expected: 3 },
       ];
-  
+
       // Run the test cases
       testCases.forEach(({ nbLignes, expected }) => {
         const result = calculerNbPages(nbLignes);
@@ -130,10 +133,10 @@ describe("Testes unitaires", () => {
         <input id="annee" value="some value">
         <input id="prix" value="some value">
       `;
-  
+
       // Run the code snippet
       effacerFormulaire();
-  
+
       // Verify that all fields are cleared
       expect(document.getElementById("marque").value).toBe("");
       expect(document.getElementById("modele").value).toBe("");
@@ -147,9 +150,9 @@ describe("Testes unitaires", () => {
   describe("Test genererEntetesListeVoitures", () => {
     test("should generate table headers correctly", () => {
       const thead = genererEntetesListeVoitures();
-  
+
       expect(thead.tagName).toBe("THEAD");
-  
+
       const expectedHeaders = [
         "Marque",
         "Modèle",
@@ -162,7 +165,7 @@ describe("Testes unitaires", () => {
       ];
       const cells = thead.querySelectorAll("td");
       expect(cells.length).toBe(expectedHeaders.length);
-  
+
       cells.forEach((cell, index) => {
         expect(cell.innerHTML).toBe(expectedHeaders[index]);
       });
@@ -171,20 +174,20 @@ describe("Testes unitaires", () => {
   describe("selectionnerPage", () => {
     let pagination;
     let pages;
-  
+
     beforeEach(() => {
       // Set up the necessary DOM elements
       pagination = document.createElement("div");
       pagination.classList.add("pagination");
-  
+
       const previous = document.createElement("a");
       previous.classList.add("previous");
       pagination.appendChild(previous);
-  
+
       const pagesContainer = document.createElement("div");
       pagesContainer.setAttribute("id", "pages");
       pagination.appendChild(pagesContainer);
-  
+
       pages = [];
       for (let i = 1; i <= 5; i++) {
         const page = document.createElement("a");
@@ -193,22 +196,22 @@ describe("Testes unitaires", () => {
         pagesContainer.appendChild(page);
         pages.push(page);
       }
-  
+
       const next = document.createElement("a");
       next.classList.add("next");
       pagination.appendChild(next);
-  
+
       document.body.appendChild(pagination);
     });
-  
+
     afterEach(() => {
       // Clean up the DOM elements
       document.body.removeChild(pagination);
     });
-  
+
     test("should select the first page and disable the previous button", () => {
       selectionnerPage(1, 10);
-  
+
       expect(pages[0].classList.contains("active")).toBe(true);
       expect(
         document
@@ -219,10 +222,10 @@ describe("Testes unitaires", () => {
         document.querySelector("div.pagination a.previous").hasAttribute("href")
       ).toBe(false);
     });
-  
+
     test("should select a middle page and enable the previous and next buttons", () => {
       selectionnerPage(3, 10);
-  
+
       expect(pages[2].classList.contains("active")).toBe(true);
       expect(
         document
@@ -237,7 +240,7 @@ describe("Testes unitaires", () => {
           .querySelector("div.pagination a.previous")
           .getAttribute("onclick")
       ).toBe("paginer(2)");
-  
+
       expect(
         document
           .querySelector("div.pagination a.next")
@@ -250,10 +253,10 @@ describe("Testes unitaires", () => {
         document.querySelector("div.pagination a.next").getAttribute("onclick")
       ).toBe("paginer(4)");
     });
-  
+
     test("should select the last page and disable the next button", () => {
       selectionnerPage(5, 10);
-  
+
       expect(pages[4].classList.contains("active")).toBe(true);
       expect(
         document
@@ -267,26 +270,26 @@ describe("Testes unitaires", () => {
   });
   describe("Test afficherFormulaireCreation", () => {
     let nouvelle, fiche, recherche, pagination;
-  
+
     beforeEach(() => {
       // Configurer les éléments DOM nécessaires
       nouvelle = document.createElement("div");
       nouvelle.id = "nouvelle";
       document.body.appendChild(nouvelle);
-  
+
       fiche = document.createElement("div");
       fiche.id = "fiche";
       document.body.appendChild(fiche);
-  
+
       recherche = document.createElement("div");
       recherche.id = "recherche";
       document.body.appendChild(recherche);
-  
+
       pagination = document.createElement("div");
       pagination.className = "pagination";
       document.body.appendChild(pagination);
     });
-  
+
     afterEach(() => {
       // Nettoyer les éléments DOM
       document.body.removeChild(nouvelle);
@@ -294,10 +297,10 @@ describe("Testes unitaires", () => {
       document.body.removeChild(recherche);
       document.body.removeChild(pagination);
     });
-  
+
     test("should display the creation form and hide other sections", () => {
       afficherFormulaireCreation();
-  
+
       expect(nouvelle.style.display).toBe("block");
       expect(fiche.style.display).toBe("none");
       expect(recherche.style.display).toBe("none");
@@ -306,19 +309,19 @@ describe("Testes unitaires", () => {
   });
   describe("Test afficherBlocVoiture", () => {
     let root;
-  
+
     beforeEach(() => {
       // Mock the DOM elements
       root = document.createElement("div");
       root.setAttribute("id", "infos");
       document.body.appendChild(root);
     });
-  
+
     afterEach(() => {
       // Clean up the DOM elements
       document.body.removeChild(root);
     });
-  
+
     test("should display car information correctly", () => {
       const voiture = JSON.stringify({
         id: 1,
@@ -330,48 +333,48 @@ describe("Testes unitaires", () => {
         annee: 2018,
         prix: 15000,
       });
-  
+
       afficherBlocVoiture(voiture);
-  
+
       const contenuVoiture = document.getElementById("contenuVoiture");
       expect(contenuVoiture).not.toBeNull();
-  
+
       const labels = contenuVoiture.querySelectorAll("label");
       const spans = contenuVoiture.querySelectorAll("span.infoVoiture");
-  
+
       expect(labels.length).toBe(7);
       expect(spans.length).toBe(7);
-  
+
       expect(labels[0].textContent).toBe("Marque : ");
       expect(spans[0].textContent).toBe("Citroen");
-  
+
       expect(labels[1].textContent).toBe("Modèle : ");
       expect(spans[1].textContent).toBe("C3");
-  
+
       expect(labels[2].textContent).toBe("Finition : ");
       expect(spans[2].textContent).toBe("Shine");
-  
+
       expect(labels[3].textContent).toBe("Carburant : ");
       expect(spans[3].textContent).toBe("Essence");
-  
+
       expect(labels[4].textContent).toBe("Kilométrage : ");
       expect(spans[4].textContent).toBe("50000");
-  
+
       expect(labels[5].textContent).toBe("Année : ");
       expect(spans[5].textContent).toBe("2018");
-  
+
       expect(labels[6].textContent).toBe("Prix : ");
       expect(spans[6].textContent).toBe("15000");
-  
+
       const divSupprimer = document.getElementById("divSupprimer");
       expect(divSupprimer).not.toBeNull();
-  
+
       const bouton = divSupprimer.querySelector("button");
       expect(bouton).not.toBeNull();
       expect(bouton.textContent).toBe("Supprimer");
       expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(1)");
     });
-  
+
     test("should remove existing car information before displaying new one", () => {
       const voiture1 = JSON.stringify({
         id: 1,
@@ -383,7 +386,7 @@ describe("Testes unitaires", () => {
         annee: 2018,
         prix: 15000,
       });
-  
+
       const voiture2 = JSON.stringify({
         id: 2,
         marque: "Peugeot",
@@ -394,149 +397,85 @@ describe("Testes unitaires", () => {
         annee: 2019,
         prix: 18000,
       });
-  
+
       afficherBlocVoiture(voiture1);
       afficherBlocVoiture(voiture2);
-  
+
       const contenuVoiture = document.getElementById("contenuVoiture");
       expect(contenuVoiture).not.toBeNull();
-  
+
       const labels = contenuVoiture.querySelectorAll("label");
       const spans = contenuVoiture.querySelectorAll("span.infoVoiture");
-  
+
       expect(labels.length).toBe(7);
       expect(spans.length).toBe(7);
-  
+
       expect(labels[0].textContent).toBe("Marque : ");
       expect(spans[0].textContent).toBe("Peugeot");
-  
+
       expect(labels[1].textContent).toBe("Modèle : ");
       expect(spans[1].textContent).toBe("208");
-  
+
       expect(labels[2].textContent).toBe("Finition : ");
       expect(spans[2].textContent).toBe("Allure");
-  
+
       expect(labels[3].textContent).toBe("Carburant : ");
       expect(spans[3].textContent).toBe("Diesel");
-  
+
       expect(labels[4].textContent).toBe("Kilométrage : ");
       expect(spans[4].textContent).toBe("30000");
-  
+
       expect(labels[5].textContent).toBe("Année : ");
       expect(spans[5].textContent).toBe("2019");
-  
+
       expect(labels[6].textContent).toBe("Prix : ");
       expect(spans[6].textContent).toBe("18000");
-  
+
       const divSupprimer = document.getElementById("divSupprimer");
       expect(divSupprimer).not.toBeNull();
-  
+
       const bouton = divSupprimer.querySelector("button");
       expect(bouton).not.toBeNull();
       expect(bouton.textContent).toBe("Supprimer");
       expect(bouton.getAttribute("onclick")).toBe("supprimerVoiture(2)");
     });
   });
-})
+});
 describe("Tests d'intégration", () => {
-  
-  describe("supprimerVoiture", () => {
-    // let fetchMock;
-    // let contenuVoiture, divSupprimer;
-    // beforeEach(() => {
-    //   // Set up the necessary DOM elements
-    //   document.body.innerHTML = `<!DOCTYPE html>
-    //                             <html lang="en">
-    //                             <head>
-    //                                 <meta charset="UTF-8">
-    //                                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    //                                 <title>Test Page</title>
-    //                             </head>
-    //                             <body>
-    //                                 <div id="contenuVoiture"></div>
-    //                                 <div id="divSupprimer"></div>
-    //                                 <div id="snackbar_suppression"></div>
-    //                             </body>
-    //                             </html>`;
-    //   // Mock the fetch function
-    //   fetchMock = jest.spyOn(global, 'fetch');
-    // });
-    // afterEach(() => {
-    //   // Clean up the DOM elements
-    //   document.body.removeChild(contenuVoiture);
-    //   document.body.removeChild(divSupprimer);
-    //   // Restore the fetch function
-    //   fetchMock.mockRestore();
-    // });
-    // test('should remove car and display success snackbar on successful deletion', async () => {
-    //   // Mock the fetch response
-    //   fetchMock.mockResolvedValueOnce({
-    //     ok: true,
-    //     json: async () => ({ succes: true })
-    //   });
-    //   console.log("document1", document.body.innerHTML);
-    //   supprimerVoiture(1);
-    //   return fetch.mock.results[0].value
-    //   .then(() => {
-    //     // Assert that fetch was called with correct params
-    //     expect(fetch).toHaveBeenCalledWith(
-    //       `${config.urlBack}/voiture/del/`,
-    //       expect.objectContaining({
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(1),
-    //       })
-    //     );
-    //     expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/voiture/del/'), expect.any(Object));
-    //     console.log("document2", document.body.innerHTML);
-    //     // Check DOM and snackbar interactions
-    //     expect(document.getElementById('contenuVoiture')).toBeNull();
-    //     expect(document.getElementById('divSupprimer')).toBeNull();
-    //   });
-    // });
-    // test('should display error snackbar on API error', async () => {
-    //   // Mock the fetch response
-    //   fetchMock.mockResolvedValueOnce({
-    //     ok: false
-    //   });
-    //   // Mock the necessary functions
-    //   global.afficherSnackbar = jest.fn();
-    //   await supprimerVoiture(1);
-    //   document.body.innerHTML = '<div id="snackbar"></div>';
-    //   const snackbar = document.getElementById('snackbar');
-    //   expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/voiture/del/'), expect.any(Object));
-    //   expect(snackbar.classList.contains('show')).toBe(true);
-    // });
-    // test('should display error snackbar on unsuccessful deletion', async () => {
-    //   // Mock the fetch response
-    //   fetchMock.mockResolvedValueOnce({
-    //     ok: true,
-    //     json: async () => ({ succes: false })
-    //   });
-    //   // Mock the necessary functions
-    //   global.afficherSnackbar = jest.fn();
-    //   await supprimerVoiture(1);
-    //   expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/voiture/del/'), expect.any(Object));
-    //   expect(afficherSnackbar).toHaveBeenCalledWith('snackbar_erreur');
-    // });
-    // test('should handle fetch error', async () => {
-    //   // Mock the fetch response
-    //   fetchMock.mockRejectedValueOnce(new Error('Fetch error'));
-    //   // Mock the necessary functions
-    //   global.afficherSnackbar = jest.fn();
-    //   await supprimerVoiture(1);
-    //   expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining('/voiture/del/'), expect.any(Object));
-    //   expect(afficherSnackbar).not.toHaveBeenCalledWith('snackbar_suppression');
-    //   expect(afficherSnackbar).not.toHaveBeenCalledWith('snackbar_erreur');
-    // });
+  ///MARK: intégration
+  describe("Test supprimerVoiture", () => {
+    let fetchMock;
+    let contenuVoiture, divSupprimer;
+    beforeEach(() => {
+      // Set up the necessary DOM elements
+      document.body.innerHTML = `<!DOCTYPE html>
+                                <html lang="en">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <title>Test Page</title>
+                                </head>
+                                <body>
+                                    <div id="contenuVoiture"></div>
+                                    <div id="divSupprimer"></div>
+                                    <div id="snackbar_suppression"></div>
+                                </body>
+                                </html>`;
+      // Mock the fetch function
+      fetchMock = jest.spyOn(global, "fetch");
+    });
+
+    test("should remove car and display success snackbar on successful deletion", async () => {
+      // Mock the fetch response
+    });
   });
-  
+
   describe("Test afficherVoiture", () => {
     beforeAll(() => {
       // Set up the necessary configuration object
-      global.config = { urlBack: "http://example.com/api", ligneParPage: 5, };
+      global.config = { urlBack: "http://example.com/api", ligneParPage: 5 };
     });
-  
+
     beforeEach(() => {
       // Mock the fetch function
       global.fetch = jest.fn((url) => {
@@ -551,22 +490,24 @@ describe("Tests d'intégration", () => {
         }
       });
     });
-  
+
     afterEach(() => {
       jest.clearAllMocks();
     });
-  
+
     test("should fetch car data and display it correctly", async () => {
       await afficherVoiture(1);
-      expect(fetch).toHaveBeenCalledWith("http://example.com/api/voiture/get/1");
+      expect(fetch).toHaveBeenCalledWith(
+        "http://example.com/api/voiture/get/1"
+      );
     });
   });
-  
+
   describe("Test ajouterContenuListeVoitures", () => {
     test("should add car data to the table correctly", () => {
       document.body.innerHTML = '<table id="testTable"></table>';
       const table = document.getElementById("testTable");
-  
+
       const mockData = {
         voitures: [
           JSON.stringify({
@@ -591,16 +532,16 @@ describe("Tests d'intégration", () => {
           }),
         ],
       };
-  
+
       ajouterContenuListeVoitures(table, mockData);
-  
+
       const tbody = table.querySelector("tbody");
       expect(tbody).not.toBeNull();
-  
+
       // Verify that the <tbody> contains the correct rows and cells with the expected content
       const rows = tbody.querySelectorAll("tr");
       expect(rows.length).toBe(mockData.voitures.length);
-  
+
       const expectedValues = [
         [
           "Citroen",
@@ -623,11 +564,11 @@ describe("Tests d'intégration", () => {
           "Détails",
         ],
       ];
-  
+
       rows.forEach((row, rowIndex) => {
         const cells = row.querySelectorAll("td");
         expect(cells.length).toBe(expectedValues[rowIndex].length);
-  
+
         cells.forEach((cell, cellIndex) => {
           if (cellIndex === cells.length - 1) {
             // Check the 'Détails' link
@@ -645,8 +586,15 @@ describe("Tests d'intégration", () => {
       });
     });
   });
-  
 
+  describe("Test genererTableauListeVoitures", () => {
+    test("should call internal methods with correct parameters", () => {
+      const mockData = { volume: 10, voitures: [] };
+      const mini = 5;
+
+      // genererTableauListeVoitures(mockData, mini);
+    });
+  });
   describe("Test afficherTableauListeVoitures", () => {
     test("fetches voiture data from the API", async () => {
       document.body.innerHTML = `
@@ -687,4 +635,4 @@ describe("Tests d'intégration", () => {
       }, 1000);
     });
   });
-})
+});
